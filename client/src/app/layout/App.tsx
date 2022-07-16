@@ -11,12 +11,12 @@ import Header from './Header';
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
-  const palleteType = darkMode ? 'dark' : 'light';
+  const paletteType = darkMode ? 'dark' : 'light';
   const theme = createTheme({
     palette: {
-      mode: palleteType,
+      mode: paletteType,
       background: {
-        default: palleteType === 'light' ? '#d9d9d9' : '#121212',
+        default: paletteType === 'light' ? '#d9d9d9' : '#121212',
       },
     },
   });

@@ -1,6 +1,9 @@
+using System;
+using System.Net.Mime;
 using System.Net.Security;
 
 using API.Data;
+using API.Middleware;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -29,6 +32,8 @@ namespace API
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebAPIv5", Version = "v1" });
+                c.EnableAnnotations();
+
             });
             services.AddDbContext<StoreDbContext>(options =>
             {
@@ -41,17 +46,20 @@ namespace API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseMiddleware<ExceptionMiddleware>();
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPIv5 v1"));
             }
 
 
-            app.UseHttpsRedirection();
-
             app.UseRouting();
+            app.UseCors(opt =>
+            {
+                opt.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
+            });
 
             app.UseAuthorization();
 
