@@ -31,7 +31,9 @@ namespace API.Controllers
 
     public async Task<IActionResult> GetProductAsync(int id)
     {
-      return Ok(await _context.Products.FindAsync(id));
+      var product = await _context.Products.FindAsync(id);
+      if(product == null) return NotFound();
+      return Ok(product);
     }
   }
 }
